@@ -11,7 +11,6 @@ client = FouryouseeAPI(TOKEN)
 def test_retrieve_all_users():
     """Test endpoint users"""
     response = client.get_users()
-
     assert isinstance(response, list)
     assert len(response[0].keys()) == 5
     assert response[0].get('id', False)
@@ -26,7 +25,6 @@ def test_retrieve_all_users():
 @vcr.use_cassette()
 def test_retrieve_all_users_groups():
     """Test endpoint users/groups"""
-
     response = client.get_users_groups()
     assert isinstance(response, list)
     assert len(response[0].keys()) == 3
@@ -38,7 +36,6 @@ def test_retrieve_all_users_groups():
 @vcr.use_cassette()
 def test_retrieve_all_uploads():
     """Test endpoint uploads"""
-
     response = client.get_uploads()
     assert isinstance(response, list)
     if response:
@@ -52,7 +49,6 @@ def test_retrieve_all_uploads():
 @vcr.use_cassette()
 def test_retrieve_all_medias():
     """Test endpoint medias"""
-
     response = client.get_medias()
     assert isinstance(response, list)
     if response:
@@ -184,7 +180,7 @@ def test_retrieve_all_news():
     assert isinstance(response, list)
     if response:
         keys_response = list(response[0].keys())
-        assert len(keys_response) == 10
+        assert len(keys_response) == 11
         assert 'id' in keys_response
         assert 'content' in keys_response
         assert 'file' in keys_response

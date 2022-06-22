@@ -45,12 +45,11 @@ class FouryouseeAPI(object):
                 'Secret-Token': self.token,
                 'Content-Type': 'application/json'
             }
-            time.sleep(1)
+            time.sleep(3)
             response = requests.request("GET", url, headers=headers,
                                         params=kwargs)
-
             if not response.ok:
-                raise Exception()
+                raise Exception(response.text)
             data = json.loads(response.text)
             if not data.get('totalPages'):
                 if data.get('results') == []:
@@ -84,7 +83,7 @@ class FouryouseeAPI(object):
         self.users_groups = self.get_all('users/groups')
         return self.users_groups
 
-    def get_uploads(self, upload_id: int = False) -> List[dict]:
+    def get_uploads(self, upload_id: str = False) -> List[dict]:
         """
         Get the uploads of the 4YouSee account.
         @param upload_id: int. Id of and upload that exists.
@@ -243,7 +242,7 @@ class FouryouseeAPI(object):
             'Content-Type': header_type,
             'Secret-Token': self.token
         }
-        time.sleep(1)
+        time.sleep(3)
         response = requests.post(url, headers=headers,
                                  data=payload, files=files)
         if not response.ok:

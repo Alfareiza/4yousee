@@ -13,6 +13,30 @@ client = FouryouseeAPI(TOKEN)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+def test_post_upload_without_file():
+    """Test endpoint for uploads without passin 'files' param"""
+    with pytest.raises(Exception) as excinfo:
+        client.upload_files(str())
+    assert str(excinfo.value) == 'Missing \'files\' field.'
+
+
+def test_post_upload_passing_str_path_file():
+    """Test endpoint for uploads passing a str that
+    depicts the path of an file"""
+    example_file = BASE_DIR / 'tests/resources_for_tests/sample-mp4-file.mp4'
+    response = client.upload_files(str(example_file))
+    assert response[0].get('filename') == example_file.name
+
+
+def test_post_upload_passing_list_of_str_path_files():
+    """Test endpoint for uploads passing a list of str where
+    every of them depicts the path of an file"""
+    ex_file_one = BASE_DIR / 'tests/resources_for_tests/sample-mp4-file.mp4'
+    ex_file_two = BASE_DIR / 'tests/resources_for_tests/sample-png-file.png'
+    response = client.upload_files([str(i) for i in [ex_file_one, ex_file_two]])
+    assert response[0].get('filename') == ex_file_one.name
+
+
 def test_post_single_media_without_file():
     """Test endpoint post for medias"""
     with pytest.raises(Exception) as excinfo:
@@ -128,8 +152,7 @@ def test_post_single_media_with_an_non_existent_category():
                                  duration=10,
                                  categories=category
                                  )
-    assert str(excinfo.value) == '{"message":"Category with ID ' + \
-           str(category) + ' was not found"}'
+    assert str(excinfo.value) == '{"message":"Category with ID ' + str(category) + ' was not found"}'
 
 
 @pytest.mark.parametrize('category',
@@ -143,8 +166,7 @@ def test_post_single_media_at_least_one_non_existent_in_multiple_categories(
     one of them doesn't exists in the 4yousee account."""
     example_file = BASE_DIR / 'tests/resources_for_tests/sample-png-file.png'
     with pytest.raises(Exception,
-                       match=r'{"message":"Category '
-                             r'with ID \d+ was not found"}'):
+                       match=r'{"message":"Category with ID \d+ was not found"}'):
         client.post_single_media(file=str(example_file),
                                  duration=10,
                                  categories=category
