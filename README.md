@@ -1,11 +1,11 @@
 Python 4YouSee Manager API Wrapper
 ===============================
-<div align = 'center'><a href="https://badge.fury.io/py/fouryousee"><img src="https://badge.fury.io/py/fouryousee.svg" alt="PyPI version" height="18"></a></div>
-<div align = 'center'><img alt="GitHub" src="https://img.shields.io/github/license/Alfareiza/4yousee?label=License"> <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dm/fouryousee?label=Downloads"></div>
+
+## <div align = 'center'><img src="https://badge.fury.io/py/fouryousee.svg" alt="PyPI version"> <img alt="GitHub" src="https://img.shields.io/github/license/Alfareiza/4yousee?label=License"> <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dm/fouryousee?label=Downloads"></div>
 
 This library is a Python wrapper around the [4YouSee](https://docs.4yousee.com/api/) REST API.
 
-Requires Python 3.8 or later.
+Requires Python 3.7 or later.
 
 
 Getting Started
@@ -23,7 +23,11 @@ Once you have it installed, get an API key from [How to get a Token to integrate
     [{'id': 1, 'name': 'Player DEMO', 'description': 'Ponto de demonstração disponibilizado na instalação do 4YouSee Manager.Player demo available on  4YouSee Manager installation.', 'platform': 'ANDROID', 'lastContactInMinutes': 210796, 'group': {'id': 1, 'name': 'Group DEMO'}, 'playerStatus': {'id': 5, 'name': 'Local assist needed', 'time': 9999999}, 'playlists': {'0': {'id': 3, 'name': 'Novo'}, '1': {'id': 3, 'name': 'Novo'}, '2': {'id': 3, 'name': 'Novo'}, '3': {'id': 3, 'name': 'Novo'}, '4': {'id': 3, 'name': 'Novo'}, '5': {'id': 3, 'name': 'Novo'}, '6': {'id': 3, 'name': 'Novo'}}, 'audios': {'0': {'id': 1, 'name': 'Contenido Vertical'}}, 'lastLogReceived': '2022-01-26 13:49:28'}, {'id': 2, 'name': '2Outputs', 'description': '', 'platform': '4YOUSEE_PLAYER', 'lastContactInMinutes': 413, 'group': {'id': 3, 'name': 'Clientes Barrio Sur A'}, 'playerStatus': {'id': 4, 'name': 'Assistance needed', 'time': 1440}, 'playlists': {'0': {'id': 70, 'name': 'Test 4uc'}, '1': {'id': 70, 'name': 'Test 4uc'}, '2': {'id': 70, 'name': 'Test 4uc'}, '3': {'id': 70, 'name': 'Test 4uc'}, '4': {'id': 70, 'name': 'Test 4uc'}, '5': {'id': 70, 'name': 'Test 4uc'}, '6': {'id': 70, 'name': 'Test 4uc'}}, 'audios': {'0': None}, 'lastLogReceived': '2022-06-21 13:11:38'}]
 
 
-
-
-
 Once you have set the user's token, all calls to the API will include that token, as if the user was logged in.
+
+
+## Author
+
+Alfonso AG - <alfareiza@gmail.com>
+
+New contributers and pull requests are welcome.
