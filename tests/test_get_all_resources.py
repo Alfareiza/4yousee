@@ -56,14 +56,15 @@ def test_retrieve_all_medias():
     response = client.get_medias()
     assert isinstance(response, list)
     if response:
-        assert len(response[0].keys()) == 7
-        assert 'id' in response[0].keys()
-        assert 'name' in response[0].keys()
-        assert 'description' in response[0].keys()
-        assert 'file' in response[0].keys()
-        assert 'durationInSeconds' in response[0].keys()
-        assert 'categories' in response[0].keys()
-        assert 'schedule' in response[0].keys()
+        keys_response = list(response[0].keys())
+        assert len(keys_response) == 7
+        assert 'id' in keys_response
+        assert 'name' in keys_response
+        assert 'description' in keys_response
+        assert 'file' in keys_response
+        assert 'durationInSeconds' in keys_response
+        assert 'categories' in keys_response
+        assert 'schedule' in keys_response
     else:
         assert response == []
 
@@ -75,16 +76,17 @@ def test_retrieve_all_media_categories():
     response = client.get_media_category()
     assert isinstance(response, list)
     if response:
+        keys_response = list(response[0].keys())
         assert len(response[0].keys()) == 9
-        assert 'id' in response[0].keys()
-        assert 'name' in response[0].keys()
-        assert 'description' in response[0].keys()
-        assert 'parent' in response[0].keys()
-        assert 'children' in response[0].keys()
-        assert 'carouselThumbnail' in response[0].keys()
-        assert 'autoShuffle' in response[0].keys()
-        assert 'updateFlow' in response[0].keys()
-        assert 'sequence' in response[0].keys()
+        assert 'id' in keys_response
+        assert 'name' in keys_response
+        assert 'description' in keys_response
+        assert 'parent' in keys_response
+        assert 'children' in keys_response
+        assert 'carouselThumbnail' in keys_response
+        assert 'autoShuffle' in keys_response
+        assert 'updateFlow' in keys_response
+        assert 'sequence' in keys_response
     else:
         assert response == []
 
@@ -96,17 +98,18 @@ def test_retrieve_all_players():
     response = client.get_players()
     assert isinstance(response, list)
     if response:
-        assert len(response[0].keys()) == 10
-        assert 'id' in response[0].keys()
-        assert 'name' in response[0].keys()
-        assert 'description' in response[0].keys()
-        assert 'platform' in response[0].keys()
-        assert 'lastContactInMinutes' in response[0].keys()
-        assert 'group' in response[0].keys()
-        assert 'playerStatus' in response[0].keys()
-        assert 'playlists' in response[0].keys()
-        assert 'audios' in response[0].keys()
-        assert 'lastLogReceived' in response[0].keys()
+        keys_response = list(response[0].keys())
+        assert len(keys_response) == 10
+        assert 'id' in keys_response
+        assert 'name' in keys_response
+        assert 'description' in keys_response
+        assert 'platform' in keys_response
+        assert 'lastContactInMinutes' in keys_response
+        assert 'group' in keys_response
+        assert 'playerStatus' in keys_response
+        assert 'playlists' in keys_response
+        assert 'audios' in keys_response
+        assert 'lastLogReceived' in keys_response
     else:
         assert response == []
 
@@ -118,9 +121,10 @@ def test_retrieve_all_playlists():
     response = client.get_playlists()
     assert isinstance(response, list)
     if response:
-        assert len(response[0].keys()) == 7
-        assert 'id' in response[0].keys()
-        assert 'name' in response[0].keys()
+        keys_response = list(response[0].keys())
+        assert len(keys_response) == 7
+        assert 'id' in keys_response
+        assert 'name' in keys_response
         assert 'durationInSeconds' in response[0].keys()
         assert 'isSubPlaylist' in response[0].keys()
         assert 'category' in response[0].keys()
@@ -137,12 +141,13 @@ def test_retrieve_all_templates():
     response = client.get_templates()
     assert isinstance(response, list)
     if response:
-        assert len(response[0].keys()) == 5
-        assert 'id' in response[0].keys()
-        assert 'name' in response[0].keys()
-        assert 'width' in response[0].keys()
-        assert 'height' in response[0].keys()
-        assert 'type' in response[0].keys()
+        keys_response = list(response[0].keys())
+        assert len(keys_response) == 5
+        assert 'id' in keys_response
+        assert 'name' in keys_response
+        assert 'width' in keys_response
+        assert 'height' in keys_response
+        assert 'type' in keys_response
     else:
         assert response == []
 
@@ -154,18 +159,19 @@ def test_retrieve_all_newsources():
     response = client.get_newsources()
     assert isinstance(response, list)
     if response:
-        assert len(response[0].keys()) == 11
-        assert 'id' in response[0].keys()
-        assert 'name' in response[0].keys()
-        assert 'url' in response[0].keys()
-        assert 'template' in response[0].keys()
-        assert 'onlyWithImages' in response[0].keys()
-        assert 'limit' in response[0].keys()
-        assert 'daysToExpire' in response[0].keys()
-        assert 'weight' in response[0].keys()
-        assert 'variables' in response[0].keys()
-        assert 'approveAutomatically' in response[0].keys()
-        assert 'insertContentAutomatically' in response[0].keys()
+        keys_response = list(response[0].keys())
+        assert len(keys_response) == 11
+        assert 'id' in keys_response
+        assert 'name' in keys_response
+        assert 'url' in keys_response
+        assert 'template' in keys_response
+        assert 'onlyWithImages' in keys_response
+        assert 'limit' in keys_response
+        assert 'daysToExpire' in keys_response
+        assert 'weight' in keys_response
+        assert 'variables' in keys_response
+        assert 'approveAutomatically' in keys_response
+        assert 'insertContentAutomatically' in keys_response
     else:
         assert response == []
 
@@ -177,7 +183,7 @@ def test_retrieve_all_news():
     response = client.get_news()
     assert isinstance(response, list)
     if response:
-        keys_response = response[0].keys()
+        keys_response = list(response[0].keys())
         assert len(keys_response) == 10
         assert 'id' in keys_response
         assert 'content' in keys_response
@@ -201,14 +207,15 @@ def test_retrieve_all_reports():
     response = client.get_reports()
     assert isinstance(response, list)
     if response:
+        keys_response = list(response[0].keys())
         assert len(response[0].keys()) == 8
-        assert 'id' in response[0].keys()
-        assert 'type' in response[0].keys()
-        assert 'format' in response[0].keys()
-        assert 'filter' in response[0].keys()
-        assert 'status' in response[0].keys()
-        assert 'url' in response[0].keys()
-        assert 'createdAt' in response[0].keys()
-        assert 'updatedAt' in response[0].keys()
+        assert 'id' in keys_response
+        assert 'type' in keys_response
+        assert 'format' in keys_response
+        assert 'filter' in keys_response
+        assert 'status' in keys_response
+        assert 'url' in keys_response
+        assert 'createdAt' in keys_response
+        assert 'updatedAt' in keys_response
     else:
         assert response == []
