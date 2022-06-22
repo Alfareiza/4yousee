@@ -4,12 +4,12 @@ from typing import List
 from pathlib import Path
 import requests
 
-from fouryousee.resources.tools import filter_id, myme_type
+from fouryousee.resources.tools import filter_id, myme_type, validate_kwargs_single_media
 
 
-class DataManager:
+class FouryouseeAPI(object):
     """
-    Class allow the comunication with the 4YouSee Manager API REST.
+    Class allow the communication with the 4YouSee Manager API REST.
     """
     url = 'https://api.4yousee.com.br/v1/'
 
@@ -38,7 +38,7 @@ class DataManager:
         number_page, limit = 1, 1
         while number_page <= limit:
             url = '{base_url}{resource}{end_str}' \
-                .format(base_url=DataManager.url,
+                .format(base_url=FouryouseeAPI.url,
                         resource=resource,
                         end_str=(lambda x: f'/{x}' if x else f'?page={number_page}')(spec_id))
             headers = {
@@ -236,7 +236,7 @@ class DataManager:
     def post(self, resource: str, header_type: str = 'application/json',
              files: str = None, payload=None):
         url = '{base_url}{resource}'.format(
-            base_url=DataManager.url,
+            base_url=FouryouseeAPI.url,
             resource=resource
         )
         headers = {
@@ -341,36 +341,10 @@ class DataManager:
         """
 
         # Validators
-        if not kwargs.get('file'):
-            raise Exception('Missing \'file\' field.')
+        validate_kwargs_single_media(kwargs)
 
         file = Path(kwargs.get('file'))
-        if not file.exists():
-            raise Exception('File not found.')
-
-        mimetype = myme_type(file)
-        type, extension = mimetype.split('/')
-
-        if mimetype not in ['video/mp4',
-                            'image/jpeg',
-                            # 'image/gif',
-                            'image/png',
-                            'application/zip']:
-            raise Exception('Invalid file.')
-
-        if mimetype in ['image/jpeg', 'image/png', 'application/zip']:
-            if not kwargs.get('duration'):
-                raise Exception("Missing 'duration' field. This must "
-                                "be an integer that depicts "
-                                "the duration of the file in the playlist."
-                                )
-            elif not isinstance(kwargs.get('duration'), int):
-                raise Exception('Invalid duration')
-
         kwargs['name'] = kwargs.get('name', file.stem)
-
-        if kwargs.get('category'):
-            raise Exception('Invalid param must be \'categories\'.')
 
         # Figure out the category to associate to the media
         if categories := kwargs.get('categories'):

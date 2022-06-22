@@ -5,10 +5,10 @@ import pytest
 import vcr
 from decouple import config
 
-from fouryousee.main import DataManager
+from fouryousee import FouryouseeAPI
 
 TOKEN = config('TOKEN')
-client = DataManager(token=TOKEN)
+client = FouryouseeAPI(TOKEN)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
