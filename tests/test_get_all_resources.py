@@ -177,18 +177,19 @@ def test_retrieve_all_news():
     response = client.get_news()
     assert isinstance(response, list)
     if response:
-        assert len(response[0].keys()) == 11
-        assert 'id' in response[0].keys()
-        assert 'content' in response[0].keys()
-        assert 'file' in response[0].keys()
-        assert 'creationDate' in response[0].keys()
-        assert 'approvalDate' in response[0].keys()
-        assert 'status' in response[0].keys()
-        assert 'startDate' in response[0].keys()
-        assert 'endDate' in response[0].keys()
-        assert 'newsourceId' in response[0].keys()
-        assert 'newsourceName' in response[0].keys()
-        assert 'image' in response[0].keys()
+        keys_response = response[0].keys()
+        assert len(keys_response) == 10
+        assert 'id' in keys_response
+        assert 'content' in keys_response
+        assert 'file' in keys_response
+        assert 'creationDate' in keys_response
+        assert 'approvalDate' in keys_response
+        assert 'status' in keys_response
+        assert 'startDate' in keys_response
+        assert 'endDate' in keys_response
+        assert 'newsourceId' in keys_response
+        assert 'newsourceName' in keys_response
+        assert 'image' in keys_response
     else:
         assert response == []
 

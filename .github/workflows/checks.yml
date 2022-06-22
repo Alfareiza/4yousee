@@ -29,6 +29,5 @@ jobs:
     - name: Tests
       env:
         TOKEN: ${{ secrets.TOKEN_4UC_MANAGER }}
-    - name: Showing token
       run: |
-        echo $TOKEN
+        pytest

@@ -50,7 +50,7 @@ class FouryouseeAPI(object):
                                         params=kwargs)
 
             if not response.ok:
-                raise Exception(response.text)
+                raise Exception()
             data = json.loads(response.text)
             if not data.get('totalPages'):
                 if data.get('results') == []:
@@ -223,7 +223,7 @@ class FouryouseeAPI(object):
     def get_reports(self, report_id: int = None) -> List[dict]:
         """
         Get the requested reports of the 4YouSee account.
-        @param id: int: Id of a single report.
+        @param report_id: int: Id of a single report.
         @return: List of dicts, where dict depicts a requested report.
                  If there is no reports already requested, will
                  return a empty list
@@ -341,7 +341,7 @@ class FouryouseeAPI(object):
         """
 
         # Validators
-        validate_kwargs_single_media(kwargs)
+        validate_kwargs_single_media(**kwargs)
 
         file = Path(kwargs.get('file'))
         kwargs['name'] = kwargs.get('name', file.stem)
