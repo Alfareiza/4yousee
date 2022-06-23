@@ -48,9 +48,8 @@ class FouryouseeAPI(object):
             time.sleep(1)
             response = requests.request("GET", url, headers=headers,
                                         params=kwargs)
-
             if not response.ok:
-                raise Exception()
+                raise Exception(response.text)
             data = json.loads(response.text)
             if not data.get('totalPages'):
                 if data.get('results') == []:
@@ -84,7 +83,7 @@ class FouryouseeAPI(object):
         self.users_groups = self.get_all('users/groups')
         return self.users_groups
 
-    def get_uploads(self, upload_id: int = False) -> List[dict]:
+    def get_uploads(self, upload_id: str = False) -> List[dict]:
         """
         Get the uploads of the 4YouSee account.
         @param upload_id: int. Id of and upload that exists.
@@ -375,3 +374,50 @@ class FouryouseeAPI(object):
             kwargs['file'] = file_uploaded[0]
             payload = json.dumps(kwargs, indent=2)
             return self.post(resource='medias', payload=payload)
+
+    def delete(self, resource: str, spec_id: str):
+        url = '{base_url}{resource}/{spec_id}'.format(
+            base_url=FouryouseeAPI.url,
+            resource=resource,
+            spec_id=spec_id
+        )
+        headers = {
+            'Content-Type': 'application/json',
+            'Secret-Token': self.token
+        }
+        time.sleep(1)
+        response = requests.delete(url, headers=headers)
+        if not response.ok:
+            raise Exception(response.text)
+        else:
+            return True
+
+    def delete_upload(self, spec_id: str = None) -> bool:
+        """
+        Delete one upload of the 4YouSee account.
+        @param spec_id: int: Id of a single upload.
+        @return: True: bool: in case the upload was deleted successfully
+        """
+        if not spec_id:
+            raise Exception('Missing id of the upload.')
+
+        try:
+            if self.get_uploads(spec_id):
+                return self.delete('uploads', spec_id)
+        except Exception:
+            raise Exception(f'Upload with ID {spec_id} was not found')
+
+    def delete_media(self, spec_id: int = None) -> bool:
+        """
+        Delete one media of the 4YouSee account.
+        @param spec_id: int: Id of a single media.
+        @return: True: bool: in case the upload was deleted successfully
+        """
+        if not spec_id:
+            raise Exception('Missing id of the media.')
+
+        try:
+            if self.get_medias(id=spec_id):
+                return self.delete('medias', spec_id)
+        except Exception:
+            raise Exception(f'Media with ID {spec_id} was not found')
