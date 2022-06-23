@@ -25,23 +25,19 @@ def random_idx(input: list) -> int:
 
 
 # Follow the tests
-@vcr.use_cassette()
-def test_retrieve_upload_by_id():
-    """Test endpoint uploads passing a id"""
-    non_existent_id = client.get_uploads('123')
-
-    assert isinstance(non_existent_id, list)
-    assert non_existent_id == []
-
-    existent_id = client.get_uploads('8e5e3ba750d619d6b827a96351ae33e9')
-
-    assert isinstance(existent_id, dict)
-    assert len(existent_id.keys()) == 2
-    assert existent_id.get('id')
-    assert existent_id.get('filename')
+@pytest.mark.parametrize('upload_id', ['123', '5021b3b7c402468d5b018a8b4a2b448a'])
+def test_retrieve_upload_by_id(upload_id):
+    """Test endpoint uploads passing an id"""
+    match_upload = client.get_uploads('upload_id')
+    if match_upload:
+        assert isinstance(match_upload, dict)
+        assert len(match_upload.keys()) == 2
+        assert match_upload.get('id')
+        assert match_upload.get('filename')
+    else:
+        assert match_upload == []
 
 
-@vcr.use_cassette()
 def test_retrieve_medias_by_id():
     """Test endpoint medias passing the id"""
     with pytest.raises(Exception):
