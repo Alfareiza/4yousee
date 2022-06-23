@@ -2,7 +2,6 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import pytest
-import vcr
 from decouple import config
 
 from fouryousee import FouryouseeAPI
@@ -53,34 +52,31 @@ def test_post_single_media_mov():
         client.post_single_media(file=str(example_file))
 
 
-@vcr.use_cassette()
 def test_post_single_media_mp4():
     """Test endpoint post for an mp4 file"""
     example_file = BASE_DIR / 'tests/resources_for_tests/sample-mp4-file.mp4'
     response = client.post_single_media(file=str(example_file))
+    client.delete_media(response.get('id'))
     assert isinstance(response, dict)
     assert len(response.keys()) == 6
     assert response.get('name') == example_file.stem
     assert response.get('categories') == [1]
 
 
-@vcr.use_cassette()
 def test_post_single_media_zip():
     """Test endpoint post for an zip with duration"""
     example_file = BASE_DIR / 'tests/resources_for_tests/sample-zip-file.zip'
     duration = 10
     response = client.post_single_media(file=str(example_file),
                                         duration=duration)
+    client.delete_media(response.get('id'))
     assert isinstance(response, dict)
     assert len(response.keys()) == 6
     assert response.get('name') == example_file.stem
     assert response.get('categories') == [1]
     assert response.get('duration') == duration
-    # Implement the next line
-    # client.del_upload(response['id'])
 
 
-@vcr.use_cassette()
 def test_post_single_media_image_without_duration():
     """Test endpoint post for an image without duration"""
     example_file = BASE_DIR / 'tests/resources_for_tests/sample-png-file.png'
@@ -90,23 +86,20 @@ def test_post_single_media_image_without_duration():
         client.post_single_media(file=example_file)
 
 
-@vcr.use_cassette()
 def test_post_single_media_image_with_duration():
     """Test endpoint post for an image with duration"""
     example_file = BASE_DIR / 'tests/resources_for_tests/sample-png-file.png'
     duration = 10
     response = client.post_single_media(file=str(example_file),
                                         duration=duration)
+    client.delete_media(response.get('id'))
     assert isinstance(response, dict)
     assert len(response.keys()) == 6
     assert response.get('name') == example_file.stem
     assert response.get('categories') == [1]
     assert response.get('duration') == duration
-    # Implement the next line
-    # client.del_upload(response['id'])
 
 
-@vcr.use_cassette()
 def test_post_single_media_with_an_existent_category():
     """Test endpoint post for an image with an existent category."""
     example_file = BASE_DIR / 'tests/resources_for_tests/sample-png-file.png'
@@ -115,10 +108,10 @@ def test_post_single_media_with_an_existent_category():
                                         duration=10,
                                         categories=1
                                         )
+    client.delete_media(response.get('id'))
     assert category in response.get('categories')
 
 
-@vcr.use_cassette()
 def test_post_single_media_with_an_non_existent_category():
     """Test endpoint post for an image with an non existent category."""
     example_file = BASE_DIR / 'tests/resources_for_tests/sample-png-file.png'
@@ -164,4 +157,5 @@ def test_post_single_media_all_existent_in_multiple_categories(category):
                                         duration=10,
                                         categories=category
                                         )
+    client.delete_media(response.get('id'))
     assert category[0] in response.get('categories')
