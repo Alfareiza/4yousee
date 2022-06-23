@@ -184,10 +184,9 @@ def test_retrieve_all_news():
     assert isinstance(response, list)
     if response:
         keys_response = list(response[0].keys())
-        assert len(keys_response) == 10
+        assert len(keys_response) >= 10
         assert 'id' in keys_response
         assert 'content' in keys_response
-        assert 'file' in keys_response
         assert 'creationDate' in keys_response
         assert 'approvalDate' in keys_response
         assert 'status' in keys_response
