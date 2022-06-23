@@ -7,7 +7,7 @@ def myme_type(file: Path) -> str:
         'application/x-zip-compressed', 'application/zip')
 
 
-def filter_id(input_id, iterable):
+def filter_id(input_id: str or int, iterable: list) -> list:
     return list(filter(lambda i: i['id'] == input_id, iterable))
 
 
