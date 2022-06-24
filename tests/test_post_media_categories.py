@@ -17,43 +17,27 @@ def test_post_media_category_passing_parent():
     assert response.get('parent').get('id') == parent
 
 
-def test_post_media_category_passing_sequence():
-    """Test endpoint post for an media category passing
-      the name, parent and sequence"""
-    name = 'sample media category'
-    parent = 1
-    sequence = [1, 2, 3]
-    response = client.post_media_category(name=name,
-                                          parent=parent,
-                                          sequence=sequence)
-    assert response.get('sequence') == sequence
-
-
 def test_post_media_category_passing_shuffle():
     """Test endpoint post for an media category passing
-      the name, parent, sequence and shuffle"""
+      the name and parent'"""
     name = 'sample media category'
     parent = 1
-    sequence = [1, 2, 3]
     autoShuffle = True
     response = client.post_media_category(name=name,
                                           parent=parent,
-                                          sequence=sequence,
                                           autoShuffle=autoShuffle)
     assert response.get('autoShuffle') == autoShuffle
 
 
 def test_post_media_category_passing_updateflow():
     """Test endpoint post for an media category passing
-      the name, parent, sequence and shuffle"""
+      the name, parent and shuffle"""
     name = 'sample media category'
     parent = 1
-    sequence = [1, 2, 3]
     shuffle = True
     updateflow = 2
     response = client.post_media_category(name=name,
                                           parent=parent,
-                                          sequence=sequence,
                                           shuffle=shuffle,
                                           updateFlow=updateflow)
     assert response.get('updateFlow') == str(updateflow)
