@@ -1,10 +1,6 @@
 import vcr
 
-from fouryousee import FouryouseeAPI
-from decouple import config
-
-TOKEN = config('TOKEN')
-client = FouryouseeAPI(TOKEN)
+from tests import client
 
 
 @vcr.use_cassette()

@@ -4,15 +4,10 @@ import random
 import pytest
 import vcr
 
-from fouryousee import FouryouseeAPI
-
-from decouple import config
-
-TOKEN = config('TOKEN')
-client = FouryouseeAPI(TOKEN)
-
-
 # Resources for testing
+from tests import client
+
+
 def timestamp(input_data: str) -> float:
     try:
         return datetime.strptime(input_data, "%Y-%m-%d %H:%M:%S").timestamp()
