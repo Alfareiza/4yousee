@@ -29,5 +29,6 @@ jobs:
     - name: Tests
       env:
         TOKEN: ${{ secrets.TOKEN_4UC_MANAGER }}
+        SECS: ${{ secrets.SECS }}
       run: |
         pytest
