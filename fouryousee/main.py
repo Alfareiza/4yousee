@@ -48,7 +48,7 @@ class FouryouseeAPI(object):
                 'Secret-Token': self.token,
                 'Content-Type': 'application/json'
             }
-            time.sleep(self.secs_between_call)
+            time.sleep(int(self.secs_between_call))
             response = requests.request("GET", url, headers=headers,
                                         params=kwargs)
             if not response.ok:
@@ -245,7 +245,7 @@ class FouryouseeAPI(object):
             'Content-Type': header_type,
             'Secret-Token': self.token
         }
-        time.sleep(self.secs_between_call)
+        time.sleep(int(self.secs_between_call))
         response = requests.post(url, headers=headers,
                                  data=payload, files=files)
         if not response.ok:
@@ -427,7 +427,7 @@ class FouryouseeAPI(object):
             'Content-Type': 'application/json',
             'Secret-Token': self.token
         }
-        time.sleep(self.secs_between_call)
+        time.sleep(int(self.secs_between_call))
         response = requests.delete(url, headers=headers)
         if not response.ok:
             raise Exception(response.text)
