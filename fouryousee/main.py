@@ -3,6 +3,7 @@ import time
 from typing import List
 from pathlib import Path
 import requests
+from decouple import config
 
 from fouryousee.resources.tools import filter_id, myme_type, validate_kwargs_single_media, \
     validate_kwargs_single_media_category
@@ -32,6 +33,7 @@ class FouryouseeAPI(object):
         self.videowall = None
         self.reports = None
         self.playlogs = None
+        self.secs_between_call = config('SECS', default=1)
 
     def get_all(self, resource, spec_id: int = False, **kwargs):
         allResources = []
@@ -46,7 +48,7 @@ class FouryouseeAPI(object):
                 'Secret-Token': self.token,
                 'Content-Type': 'application/json'
             }
-            time.sleep(1)
+            time.sleep(self.secs_between_call)
             response = requests.request("GET", url, headers=headers,
                                         params=kwargs)
             if not response.ok:
@@ -243,7 +245,7 @@ class FouryouseeAPI(object):
             'Content-Type': header_type,
             'Secret-Token': self.token
         }
-        time.sleep(1)
+        time.sleep(self.secs_between_call)
         response = requests.post(url, headers=headers,
                                  data=payload, files=files)
         if not response.ok:
@@ -425,7 +427,7 @@ class FouryouseeAPI(object):
             'Content-Type': 'application/json',
             'Secret-Token': self.token
         }
-        time.sleep(1)
+        time.sleep(self.secs_between_call)
         response = requests.delete(url, headers=headers)
         if not response.ok:
             raise Exception(response.text)
