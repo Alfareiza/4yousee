@@ -2,14 +2,8 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import pytest
-from decouple import config
 
-from fouryousee import FouryouseeAPI
-
-TOKEN = config('TOKEN')
-client = FouryouseeAPI(TOKEN)
-
-BASE_DIR = Path(__file__).resolve().parent.parent
+from tests import client, BASE_DIR
 
 
 def test_post_single_media_without_file():
