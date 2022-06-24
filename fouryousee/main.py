@@ -4,7 +4,8 @@ from typing import List
 from pathlib import Path
 import requests
 
-from fouryousee.resources.tools import filter_id, myme_type, validate_kwargs_single_media
+from fouryousee.resources.tools import filter_id, myme_type, validate_kwargs_single_media, \
+    validate_kwargs_single_media_category
 
 
 class FouryouseeAPI(object):
@@ -106,7 +107,7 @@ class FouryouseeAPI(object):
         """
         Get the medias of the 4YouSee account.
         @param kwargs: dict with the query params. They could be:
-        - id: (int, optional) -
+        - id: (int, optional) - One and only id of a media
         - name: (str, optional) - Full or part name
         - categoryId: (int, optional) - ID media category.
                     It's not allowed to send a list of categories id
@@ -375,6 +376,45 @@ class FouryouseeAPI(object):
             payload = json.dumps(kwargs, indent=2)
             return self.post(resource='medias', payload=payload)
 
+    def post_media_category(self, **kwargs) -> dict:
+        """
+
+        :param kwargs: dict with the query params. They could be:
+        - name (str, required) Category/subcategory display name
+        - description (str) - Detailed category description
+        - parent (int) - When informed it creates a subcategory
+        - shuffle (int, optional) - True to scramble the order of
+                                        contents on the carousel.
+        - updateflow (int, optional) - 1: to restart carousel after
+                        carousel update; 2: Do not restart after carousel update.
+        - sequence (list of ints, optional) - Array containing the media
+                    ids in the order you want them to appear on the carousel.
+        :return: dict that depicts the media category created.
+               Ex: (If it's just passed the name.)
+                    {
+                      "id": 29,
+                      "name": "sample category",
+                      "description": null,
+                      "parent": null,
+                      "children": [],
+                      "carouselThumbnail": null,
+                      "autoShuffle": false,
+                      "updateFlow": "1",
+                      "sequence": null
+                    }
+        """
+        # Validators
+        validate_kwargs_single_media_category(**kwargs)
+
+        if sequence := kwargs.get('sequence'):
+            for i in sequence:
+                dict_media = self.get_medias(id=int(i))
+                if not dict_media:
+                    raise Exception(f'Media with ID {i} was not found')
+
+        payload = json.dumps(kwargs, indent=2)
+        return self.post('medias/categories/', payload=payload)
+
     def delete(self, resource: str, spec_id: str):
         url = '{base_url}{resource}/{spec_id}'.format(
             base_url=FouryouseeAPI.url,
@@ -421,3 +461,9 @@ class FouryouseeAPI(object):
                 return self.delete('medias', spec_id)
         except Exception:
             raise Exception(f'Media with ID {spec_id} was not found')
+
+
+if __name__ == '__main__':
+    c = FouryouseeAPI('ca0c685c9b24310e6d08533a73c967db')
+    r = c.post_media_category(name='xyz', parent=1, sequence=[1, 2, 3], autoShuffle=True, updateFlow=2)
+    print(json.dumps(r, indent=2))
