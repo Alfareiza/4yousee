@@ -60,3 +60,61 @@ def validate_kwargs_single_media_category(**kwargs) -> Exception or None:
     if sequence := kwargs.get('sequence'):
         if not isinstance(sequence, list):
             raise Exception('Invalid sequence, must be a list')
+
+
+def validate_kwargs_player(**kwargs) -> Exception or None:
+    """Validate the kwargs sent to the post_player function"""
+    if not kwargs.get('name'):
+        raise Exception('Missing \'name\' field.')
+
+    if playlists := kwargs.get('playlists'):
+        if not isinstance(playlists, dict) and \
+                list(playlists.keys()) != ['0', '1', '2', '3', '4', '5', '6']:
+            raise Exception('Invalid playlists field')
+
+    if platform := kwargs.get('platform'):
+        if not isinstance(platform, list) and \
+                platform not in ['SAMSUNG', 'WINDOWS',
+                                 'ANDROID', '4YOUSEE_PLAYER', 'LG']:
+            raise Exception('Invalid platform field')
+
+    if audios := kwargs.get('audios'):
+        if not isinstance(audios, dict) and list(audios.keys()) != ['0']:
+            raise Exception('Invalid audios field')
+
+
+def validate_kwargs_playlist(**kwargs) -> Exception or None:
+    """Validate the kwargs sent to the post_playlists function"""
+    if not kwargs.get('name'):
+        raise Exception('Missing \'name\' field.')
+
+    if isSubPlaylist := kwargs.get('isSubPlaylist'):
+        if not isinstance(isSubPlaylist, bool):
+            raise Exception('Invalid isSubPlaylist field')
+
+    if category := kwargs.get('category'):
+        if not isinstance(category, int):
+            raise Exception('Invalid category field')
+
+    if items := kwargs.get('items'):
+        if not isinstance(items, list):
+            raise Exception('Invalid items field')
+
+    if sequence := kwargs.get('sequence'):
+        if not isinstance(sequence, list):
+            raise Exception('Invalid sequences field')
+
+
+def validate_kwargs_report(**kwargs) -> Exception or None:
+    """Validate the kwargs sent to the post_reports function"""
+    if filter := kwargs.get('filter'):
+        if not isinstance(filter, dict):
+            raise Exception('Invalid audios field')
+
+        if mediaId := kwargs.get('mediaId'):
+            if not isinstance(mediaId, list):
+                raise Exception('Invalid mediaId field')
+
+        if playerId := kwargs.get('playerId'):
+            if not isinstance(playerId, list):
+                raise Exception('Invalid playerId field')
