@@ -6,7 +6,7 @@ import requests
 from decouple import config
 
 from fouryousee.resources.tools import filter_id, myme_type, validate_kwargs_single_media, \
-    validate_kwargs_single_media_category
+    validate_kwargs_single_media_category, validate_kwargs_player, validate_kwargs_playlist, validate_kwargs_report
 
 
 class FouryouseeAPI(object):
@@ -140,7 +140,7 @@ class FouryouseeAPI(object):
         self.media_category = self.get_all('medias/categories')
         return self.media_category
 
-    def get_players(self, player_id: int = None) -> List[dict]:
+    def get_players(self, player_id: int = None) -> List[dict] or dict:
         """
         Get the players of the 4YouSee account.
         @param player_id: int: Id of a single player.
@@ -152,7 +152,7 @@ class FouryouseeAPI(object):
         self.players = self.get_all('players')
         return self.players
 
-    def get_playlists(self, playlist_id: int = None) -> List[dict]:
+    def get_playlists(self, playlist_id: int = None) -> List[dict] or dict:
         """
         Get the playlists of the 4YouSee account.
         @param playlist_id: int: Id of a single playlist.
@@ -380,7 +380,7 @@ class FouryouseeAPI(object):
 
     def post_media_category(self, **kwargs) -> dict:
         """
-
+        Create a new category in the 4yousee account library.
         :param kwargs: dict with the query params. They could be:
         - name (str, required) Category/subcategory display name
         - description (str) - Detailed category description
@@ -389,8 +389,6 @@ class FouryouseeAPI(object):
                                         contents on the carousel.
         - updateflow (int, optional) - 1: to restart carousel after
                         carousel update; 2: Do not restart after carousel update.
-        - sequence (list of ints, optional) - Array containing the media
-                    ids in the order you want them to appear on the carousel.
         :return: dict that depicts the media category created.
                Ex: (If it's just passed the name.)
                     {
@@ -407,15 +405,344 @@ class FouryouseeAPI(object):
         """
         # Validators
         validate_kwargs_single_media_category(**kwargs)
-
-        if sequence := kwargs.get('sequence'):
-            for i in sequence:
-                dict_media = self.get_medias(id=int(i))
-                if not dict_media:
-                    raise Exception(f'Media with ID {i} was not found')
-
         payload = json.dumps(kwargs, indent=2)
         return self.post('medias/categories/', payload=payload)
+
+    def post_player(self, **kwargs) -> dict:
+        """
+        Create a new player in the 4yousee account.
+        :param kwargs: dict with the query params. They could be:
+        - name (str, required) player display name.
+        - description (str, optional) - Detailed player description.
+        - platform (str, required) - Platform where the 4yousee player will
+                   be executed:
+                   Ex.: 4YOUSEE_PLAYER ou SAMSUNG ou ANDROID ou LG
+        - group (int, optional) - Id of a group of players.
+        - playlists (dict, required) - 7 keys where every one depicts
+                    the number of the they where sunday is 0, and 7
+                    values where every one depicts the id of the playlist
+                    that the player will play that day.
+                        Ex.:
+                          {
+                            "0": 1,
+                            "1": 1,
+                            "2": 1,
+                            "3": 1,
+                            "4": 1,
+                            "5": 1,
+                            "6": 1
+                          }
+        - audios (dict, optional) - A dict with "0" as his only key and
+                    a value that depicts the id of the audio playlists.
+                    Ex.:
+                      "audios": {
+                                "0": 1
+                              }
+        :return: dict that depicts the player created.
+               Ex: {
+                      "id": 6,
+                      "name": "Player name example",
+                      "description": "Player description example",
+                      "platform": "4YOUSEE_PLAYER",
+                      "lastContactInMinutes": null,
+                      "group": {
+                        "id": 1,
+                        "name": "Group DEMO"
+                      },
+                      "playerStatus": {
+                        "id": 6,
+                        "name": "Never accessed",
+                        "time": 0
+                      },
+                      "playlists": {
+                        "0": {
+                          "id": 1,
+                          "name": "Playlist DEMO"
+                        },
+                        "1": {
+                          "id": 1,
+                          "name": "Playlist DEMO"
+                        },
+                        "2": {
+                          "id": 1,
+                          "name": "Playlist DEMO"
+                        },
+                        "3": {
+                          "id": 1,
+                          "name": "Playlist DEMO"
+                        },
+                        "4": {
+                          "id": 1,
+                          "name": "Playlist DEMO"
+                        },
+                        "5": {
+                          "id": 1,
+                          "name": "Playlist DEMO"
+                        },
+                        "6": {
+                          "id": 1,
+                          "name": "Playlist DEMO"
+                        }
+                      },
+                      "audios": {
+                        "0": {
+                          "id": 1,
+                          "name": "Playlist DEMO"
+                        }
+                      }
+                    }
+        """
+        # Validators
+        validate_kwargs_player(**kwargs)
+
+        if len(kwargs.get('name')) > 50:
+            kwargs['name'] = kwargs['group'][:46] + '...'
+
+        kwargs['group'] = kwargs.get('group', 1)
+
+        payload = json.dumps(kwargs, indent=2)
+        return self.post('players/', payload=payload)
+
+    def post_playlists(self, **kwargs) -> dict:
+        """
+        Create a new playlist in the 4yousee account.
+        :param kwargs: dict with the query params. They could be:
+        - name (str, required) playlist display name.
+        - isSubPlaylist (bool, optional) - Default value is False.
+        - category (int, optional) - Id of category of playlists.
+        - items (list of dicts, required) - Platform where the 4yousee player will
+                Ex.:
+                    [
+                        {
+                            "type": "layout",
+                            "id": 1
+                        },
+                        {
+                            "type": "videowall",
+                            "abortIfError": false,
+                            "ignoreLayout": false,
+                            "grid": [
+                                [
+                                    {
+                                        "type": "media",
+                                        "id": 4
+                                    },
+                                    {
+                                        "type": "media",
+                                        "id": 1
+                                    }
+                                ],
+                                [
+                                    {
+                                        "type": "media",
+                                        "id": 2
+                                    },
+                                    {
+                                        "type": "media",
+                                        "id": 4
+                                    }
+                                ]
+                            ]
+                        },
+                        {
+                            "type": "media",
+                            "id": 5
+                        },
+                        {
+                            "type": "news"
+                        }
+                    ]
+        - sequence (list, required) - Sequence of execution of the items.
+                    Ex.: [
+                            0,
+                            1,
+                            2,
+                            3
+                        ]
+        :return: dict that depicts the playlist created.
+               Ex: {
+                      "id": 40,
+                      "name": "Playlist Created via API",
+                      "durationInSeconds": 46,
+                      "isSubPlaylist": false,
+                      "category": null,
+                      "items": [
+                        {
+                          "type": "layout",
+                          "id": 1,
+                          "name": "Grid 1920x1080 com 1 área",
+                          "width": 1920,
+                          "height": 1080
+                        },
+                        {
+                          "type": "videoWall",
+                          "abortIfError": false,
+                          "ignoreLayout": false,
+                          "grid": [
+                            [
+                              {
+                                "id": 4,
+                                "name": "4YouSee Analyse",
+                                "file": "i_4.mp4",
+                                "durationInSeconds": 10,
+                                "contentSchedule": {
+                                  "startDate": "2021-02-01"
+                                }
+                              },
+                              {
+                                "id": 1,
+                                "name": "4YouSee Play",
+                                "file": "i_1.mp4",
+                                "durationInSeconds": 10,
+                                "contentSchedule": {
+                                  "times": [
+                                    {
+                                      "startTime": "11:00",
+                                      "endTime": "19:00",
+                                      "weekDays": [
+                                        0,
+                                        1,
+                                        2,
+                                        3,
+                                        4,
+                                        5,
+                                        6
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            ],
+                            [
+                              {
+                                "id": 2,
+                                "name": "4YouSee Manage",
+                                "file": "i_2.mp4",
+                                "durationInSeconds": 10,
+                                "contentSchedule": {
+                                  "startDate": "2021-02-02",
+                                  "endDate": "2021-06-05",
+                                  "times": [
+                                    {
+                                      "startTime": "05:00",
+                                      "endTime": "21:00",
+                                      "weekDays": [
+                                        0,
+                                        2,
+                                        3,
+                                        4,
+                                        6
+                                      ]
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "id": 4,
+                                "name": "4YouSee Analyse",
+                                "file": "i_4.mp4",
+                                "durationInSeconds": 10,
+                                "contentSchedule": {
+                                  "startDate": "2021-02-01"
+                                }
+                              }
+                            ]
+                          ]
+                        },
+                        {
+                          "type": "media",
+                          "id": 5,
+                          "name": "Walking",
+                          "file": "i_5.mp4",
+                          "durationInSeconds": 26,
+                          "contentSchedule": {
+                            "times": [
+                              {
+                                "startTime": "00:00",
+                                "endTime": "23:59",
+                                "weekDays": [
+                                  0,
+                                  2,
+                                  4,
+                                  6
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "news",
+                          "durationInSeconds": 10
+                        }
+                      ],
+                      "sequence": [
+                        0,
+                        1,
+                        2,
+                        3
+                      ]
+                    }
+        """
+        # Validators
+        validate_kwargs_playlist(**kwargs)
+
+        if len(kwargs.get('name')) > 50:
+            kwargs['name'] = kwargs['name'][:46] + '...'
+
+        payload = json.dumps(kwargs, indent=2)
+        return self.post('playlists/', payload=payload)
+
+    def post_reports(self, **kwargs) -> dict:
+        """
+         Create a new request of report in the 4yousee account.
+         Once is received the response, through the id will be possible
+         to consult if the report is ready.
+        :param kwargs: dict with the query params. They could be:
+        - type (str, required). Default value is 'detailed'
+        - webhook (str, optional) - Web service that may allow the response
+                    of the 4yousee servers. THis response will
+                    have the result of report.
+                    Ex.: 'http://4fc8e5ddf059.ngrok.io'
+        - filter: (dict, required) - Interval of time of the desired report.
+                    Ex.:
+                        {
+                            "startDate": "2020-07-26",
+                            "startTime": "00:00:00",
+                            "endDate": "2020-08-24",
+                            "endTime": "23:59:59",
+                            "mediaId": [ ],  # List of id medias.
+                            "playerId": [ ],  # List of id players.
+                            "sort": -1
+                            }
+        - sort (int, optional) - Default values is -1.
+        :return: dict that depicts the playlist created.
+               {
+                   "id":521356,
+                   "type":"detailed",
+                   "format":"json",
+                   "filter":{
+                      "startDate":"2020-07-26",
+                      "startTime":"00:00:00",
+                      "endDate":"2020-08-24",
+                      "endTime":"23:59:59",
+                      "mediaId":[],
+                      "playerId":[ 2 ],
+                      "sort":-1
+                   },
+                   "status":"waiting",
+                   "url":"None",
+                   "createdAt":"2022-06-24T21:42:05+00:00",
+                   "updatedAt":"2022-06-24T21:42:05+00:00"
+                }
+        """
+        # Validators
+        validate_kwargs_report(**kwargs)
+
+        kwargs['filter']['sort'] = kwargs.get('filter').get('sort', -1)
+        kwargs['type'] = kwargs.get('type', 'detailed')
+
+        payload = json.dumps(kwargs, indent=2)
+        return self.post('reports/', payload=payload)
 
     def delete(self, resource: str, spec_id: str):
         url = '{base_url}{resource}/{spec_id}'.format(
@@ -453,7 +780,7 @@ class FouryouseeAPI(object):
         """
         Delete one media of the 4YouSee account.
         @param spec_id: int: Id of a single media.
-        @return: True: bool: in case the upload was deleted successfully
+        @return: True: bool: in case the media was deleted successfully
         """
         if not spec_id:
             raise Exception('Missing id of the media.')
@@ -464,8 +791,32 @@ class FouryouseeAPI(object):
         except Exception:
             raise Exception(f'Media with ID {spec_id} was not found')
 
+    def delete_player(self, spec_id: int = None) -> bool:
+        """
+        Delete one player of the 4YouSee account.
+        @param spec_id: int: Id of a single player.
+        @return: True: bool: in case the player was deleted successfully
+        """
+        if not spec_id:
+            raise Exception('Missing id of the player.')
 
-if __name__ == '__main__':
-    c = FouryouseeAPI('ca0c685c9b24310e6d08533a73c967db')
-    r = c.post_media_category(name='xyz', parent=1, sequence=[1, 2, 3], autoShuffle=True, updateFlow=2)
-    print(json.dumps(r, indent=2))
+        try:
+            if self.get_players(spec_id):
+                return self.delete('players', spec_id)
+        except Exception:
+            raise Exception(f'Player with ID {spec_id} was not found')
+
+    def delete_playlist(self, spec_id: int = None) -> bool:
+        """
+        Delete one playlist of the 4YouSee account.
+        @param spec_id: int: Id of a single playlist.
+        @return: True: bool: in case the playlist was deleted successfully
+        """
+        if not spec_id:
+            raise Exception('Missing id of the player.')
+
+        try:
+            if self.get_playlists(spec_id):
+                return self.delete('playlists', spec_id)
+        except Exception:
+            raise Exception(f'Playlist with ID {spec_id} was not found')
