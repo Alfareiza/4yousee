@@ -5,6 +5,6 @@ Fouryousee provides easy way to communicate with
 your 4yousee account.
 """
 
-__version__ = '0.1'
+__version__ = '0.2'
 
 from .main import FouryouseeAPI
