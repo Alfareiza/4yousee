@@ -132,7 +132,7 @@ setup(
         "Framework :: Pytest",
     ],
     install_requires=[
-        'requests'
+        'requests', 'python-decouple'
     ],
     zip_safe=False,
 )
