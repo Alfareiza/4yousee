@@ -6,5 +6,3 @@ your 4yousee account.
 """
 
 __version__ = '0.2'
-
-from .main import FouryouseeAPI
