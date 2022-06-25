@@ -1,5 +1,7 @@
+<h2 align = 'center'>
 Python 4YouSee Manager API Wrapper
-===============================
+</h2>
+
 
 ## <div align = 'center'><img src="https://badge.fury.io/py/fouryousee.svg" alt="PyPI version"> <img alt="GitHub" src="https://img.shields.io/github/license/Alfareiza/4yousee?label=License"> <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dm/fouryousee?label=Downloads"></div>
 
