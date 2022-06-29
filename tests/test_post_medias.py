@@ -22,34 +22,34 @@ def test_post_single_media_invalid_file():
                             errors='replace') as ex_file:
             ex_file.write("<html><head></head><body></body></html>")
         with pytest.raises(Exception, match='Invalid file.'):
-            client.post_single_media(file=str(html_file))
+            client.post_single_media(file=str(html_file), categories=1)
 
 
 def test_post_single_media_nonexistent_file():
     """Test endpoint post for an non existent file"""
     with pytest.raises(Exception, match='File not found.'):
         client.post_single_media(
-            file="C:\\Users\\User\\Documents\\non-existent-file.mp4")
+            file="C:\\Users\\User\\Documents\\non-existent-file.mp4", categories=1)
 
 
 def test_post_single_media_wmv():
     """Test endpoint post for an wmv file"""
     example_file = BASE_DIR / 'tests/resources_for_tests/sample-wmv-file.wmv'
     with pytest.raises(Exception, match='Invalid file.'):
-        client.post_single_media(file=str(example_file))
+        client.post_single_media(file=str(example_file), categories=1)
 
 
 def test_post_single_media_mov():
     """Test endpoint post for an mov file"""
     example_file = BASE_DIR / 'tests/resources_for_tests/sample-mov-file.mov'
     with pytest.raises(Exception, match='Invalid file.'):
-        client.post_single_media(file=str(example_file))
+        client.post_single_media(file=str(example_file), categories=1)
 
 
 def test_post_single_media_mp4():
     """Test endpoint post for an mp4 file"""
     example_file = BASE_DIR / 'tests/resources_for_tests/sample-mp4-file.mp4'
-    response = client.post_single_media(file=str(example_file))
+    response = client.post_single_media(file=str(example_file), categories=1)
     client.delete_media(response.get('id'))
     assert isinstance(response, dict)
     assert len(response.keys()) == 6
@@ -62,7 +62,7 @@ def test_post_single_media_zip():
     example_file = BASE_DIR / 'tests/resources_for_tests/sample-zip-file.zip'
     duration = 10
     response = client.post_single_media(file=str(example_file),
-                                        duration=duration)
+                                        duration=duration, categories=1)
     client.delete_media(response.get('id'))
     assert isinstance(response, dict)
     assert len(response.keys()) == 6
@@ -77,7 +77,7 @@ def test_post_single_media_image_without_duration():
     with pytest.raises(Exception,
                        match='Missing \'duration\' field. This must be an integer that '
                              'depicts the duration of the file in the playlist.'):
-        client.post_single_media(file=example_file)
+        client.post_single_media(file=example_file, categories=1)
 
 
 def test_post_single_media_image_with_duration():
@@ -85,7 +85,7 @@ def test_post_single_media_image_with_duration():
     example_file = BASE_DIR / 'tests/resources_for_tests/sample-png-file.png'
     duration = 10
     response = client.post_single_media(file=str(example_file),
-                                        duration=duration)
+                                        duration=duration, categories=1)
     client.delete_media(response.get('id'))
     assert isinstance(response, dict)
     assert len(response.keys()) == 6
@@ -97,26 +97,21 @@ def test_post_single_media_image_with_duration():
 def test_post_single_media_with_an_existent_category():
     """Test endpoint post for an image with an existent category."""
     example_file = BASE_DIR / 'tests/resources_for_tests/sample-png-file.png'
-    category = 1
     response = client.post_single_media(file=str(example_file),
                                         duration=10,
-                                        categories=1
-                                        )
+                                        categories=[1])
     client.delete_media(response.get('id'))
-    assert category in response.get('categories')
+    assert 1 in response.get('categories')
 
 
 def test_post_single_media_with_an_non_existent_category():
     """Test endpoint post for an image with an non existent category."""
     example_file = BASE_DIR / 'tests/resources_for_tests/sample-png-file.png'
     category = 1_000
-    with pytest.raises(Exception) as excinfo:
+    with pytest.raises(Exception):
         client.post_single_media(file=str(example_file),
                                  duration=10,
-                                 categories=category
-                                 )
-    assert str(excinfo.value) == '{"message":"Category with ID ' + \
-           str(category) + ' was not found"}'
+                                 categories=category)
 
 
 @pytest.mark.parametrize('category',
@@ -129,9 +124,7 @@ def test_post_single_media_at_least_one_non_existent_in_multiple_categories(
     """Test endpoint post for an image with multiple categories where at least
     one of them doesn't exists in the 4yousee account."""
     example_file = BASE_DIR / 'tests/resources_for_tests/sample-png-file.png'
-    with pytest.raises(Exception,
-                       match=r'{"message":"Category '
-                             r'with ID \d+ was not found"}'):
+    with pytest.raises(Exception):
         client.post_single_media(file=str(example_file),
                                  duration=10,
                                  categories=category
