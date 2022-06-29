@@ -1,5 +1,6 @@
 import mimetypes
 from pathlib import Path
+from typing import Dict, Any
 
 
 def myme_type(file: Path) -> str:
@@ -13,10 +14,45 @@ def filter_id(input_id: str or int, iterable: list) -> list:
     return list(filter(lambda i: i['id'] == input_id, iterable))
 
 
+def brief_player(player: dict) -> dict:
+    """Receive a player object an return the information required
+     to the payload """
+    return dict(name=player['name'],
+                description=player['description'],
+                group=player['group']['id'],
+                platform=player['platform'],
+                playlists={str(k): v['id'] for k, v in
+                           enumerate(player['playlists'].values())},
+                audios={} if not player['audios']['0'] else {'0': player['audios']['0']['id']})
+
+
+def brief_playlist(playlist: dict) -> dict:
+    """Receive a playlist object an return the information required
+     to the payload """
+    return dict(name=playlist['name'],
+                isSubPlaylist=playlist['isSubPlaylist'],
+                category=playlist['category']['id'] if playlist['category'] else None,
+                items=playlist['items'],
+                sequence=playlist['sequence'])
+
+
+def brief_media(media: dict) -> dict:
+    """Receive a media object an return the information required
+     to the payload """
+    return dict(name=media['name'],
+                duration=media['durationInSeconds'],
+                categories=[i['id'] for i in media['categories']],
+                schedule=media['schedule'])
+
+
 def validate_kwargs_single_media(**kwargs) -> Exception or None:
     """Validate the kwargs sent to the post_single_media function"""
     if not kwargs.get('file'):
         raise Exception('Missing \'file\' field.')
+
+    if not kwargs.get('categories'):
+        raise Exception('Missing \'categories\' field.')
+
     file = Path(kwargs.get('file'))
     if not file.exists():
         raise Exception('File not found.')
@@ -64,8 +100,6 @@ def validate_kwargs_single_media_category(**kwargs) -> Exception or None:
 
 def validate_kwargs_player(**kwargs) -> Exception or None:
     """Validate the kwargs sent to the post_player function"""
-    if not kwargs.get('name'):
-        raise Exception('Missing \'name\' field.')
 
     if playlists := kwargs.get('playlists'):
         if not isinstance(playlists, dict) and \
@@ -85,9 +119,6 @@ def validate_kwargs_player(**kwargs) -> Exception or None:
 
 def validate_kwargs_playlist(**kwargs) -> Exception or None:
     """Validate the kwargs sent to the post_playlists function"""
-    if not kwargs.get('name'):
-        raise Exception('Missing \'name\' field.')
-
     if isSubPlaylist := kwargs.get('isSubPlaylist'):
         if not isinstance(isSubPlaylist, bool):
             raise Exception('Invalid isSubPlaylist field')
