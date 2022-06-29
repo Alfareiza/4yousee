@@ -2,7 +2,7 @@ from pathlib import Path
 
 from decouple import config
 
-from fouryousee import FouryouseeAPI
+from fouryousee.fouryousee import FouryouseeAPI
 
 TOKEN = config('TOKEN')
 client = FouryouseeAPI(TOKEN)
