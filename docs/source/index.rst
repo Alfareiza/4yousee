@@ -11,6 +11,7 @@ Welcome to Fouryousee's documentation!
    :caption: Contents:
 
    installation
+   uploads
    medias
    media categories
    playlists
@@ -18,7 +19,6 @@ Welcome to Fouryousee's documentation!
    newsources
    news
    users
-   usersgroups
    templates
    reports
 
