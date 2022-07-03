@@ -6,9 +6,8 @@ with pip::
 
     pip install fouryousee
 
-
 Usage
-------
+-----
 
 Before start, is mandatory get an API key from your 4yousee account. Follow the official documentation: `How to get a Token to integrate with the API of 4YouSee Manager
 <https://suporte.4yousee.com.br/en/support/solutions/articles/72000532960-how-to-get-a-token-to-integrate-with-the-api-of-4yousee-manager>`__.
