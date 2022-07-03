@@ -13,7 +13,7 @@ def test_post_reports():
         "playerId": [2],
         "sort": -1
     }
-    response = client.post_reports(filter=filter)
+    response = client.request_report(filter=filter)
     assert response.get('filter').get('startDate') == filter['startDate']
     assert response.get('filter').get('startTime') == filter['startTime']
     assert response.get('filter').get('endDate') == filter['endDate']

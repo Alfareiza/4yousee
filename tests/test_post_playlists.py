@@ -13,7 +13,7 @@ def test_post_playlists():
               'categories': [{'id': 1, 'name': 'DEMO'}],
               'contentSchedule': {'startDate': '2050-11-26'}}]
     sequence = [0, 1]
-    response = client.post_playlists(name=name, items=items, sequence=sequence)
+    response = client.add_playlist(name=name, items=items, sequence=sequence)
     assert response.get('name') == name
     assert response.get('items') == items
     assert response.get('sequence') == sequence
