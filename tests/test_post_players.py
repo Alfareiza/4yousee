@@ -6,7 +6,7 @@ def test_post_player():
     name = 'sample media player'
     playlists = {"0": 1, "1": 1, "2": 1, "3": 1, "4": 1, "5": 1, "6": 1}
     platform = 'ANDROID'
-    response = client.post_player(name=name, playlists=playlists, platform=platform)
+    response = client.add_player(name=name, playlists=playlists, platform=platform)
     assert response.get('name') == name
     id_playlists = [i['id'] for i in response.get('playlists').values()]
     assert id_playlists == list(playlists.values())
