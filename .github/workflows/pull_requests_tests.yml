@@ -33,4 +33,5 @@ jobs:
         pytest --cov=.\
     - name: Upload coverage to Codecov
       run: |
-	codecov
+        codecov
+	
