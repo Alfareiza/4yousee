@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import List
 
 import requests
-from decouple import config
 
 
 class FouryouseeAPI(object):
@@ -34,7 +33,6 @@ class FouryouseeAPI(object):
         self.videowall = None
         self.reports = None
         self.playlogs = None
-        self.secs_between_call = config("SECS", default=1)
 
     def get_all(self, resource, spec_id: int = False, **kwargs):
         all_registers = []
@@ -52,7 +50,7 @@ class FouryouseeAPI(object):
                 "Secret-Token": self.token,
                 "Content-Type": "application/json",
             }
-            time.sleep(int(self.secs_between_call))
+            time.sleep(1)
             response = requests.request(
                 "GET", url, headers=headers, params=kwargs
             )
@@ -1229,7 +1227,7 @@ class FouryouseeAPI(object):
             base_url=FouryouseeAPI.url, resource=resource
         )
         headers = {"Content-Type": header_type, "Secret-Token": self.token}
-        time.sleep(int(self.secs_between_call))
+        time.sleep(1)
         response = requests.post(
             url, headers=headers, data=payload, files=files
         )
@@ -1824,7 +1822,7 @@ class FouryouseeAPI(object):
             "Content-Type": "application/json",
             "Secret-Token": self.token,
         }
-        time.sleep(int(self.secs_between_call))
+        time.sleep(1)
         response = requests.delete(url, headers=headers)
         if not response.ok:
             raise Exception(response.text)
@@ -1974,7 +1972,7 @@ class FouryouseeAPI(object):
             "Content-Type": "application/json",
             "Secret-Token": self.token,
         }
-        time.sleep(int(self.secs_between_call))
+        time.sleep(1)
         response = requests.put(url, headers=headers, data=payload)
         if not response.ok:
             raise Exception(response.text)
