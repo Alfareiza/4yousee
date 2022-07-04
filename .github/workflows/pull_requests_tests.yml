@@ -31,6 +31,6 @@ jobs:
         TOKEN: ${{ secrets.TOKEN_4UC_MANAGER }}
       run: |
         cd tests
-        pytest --cov . --cov-report xml:/home/runner/coverage.xml
+        pytest --cov .
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
