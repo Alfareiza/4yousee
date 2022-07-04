@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ 3.7 ]
+        python-version: [ 3.8 ]
 
     steps:
     - uses: actions/checkout@v2
@@ -29,6 +29,5 @@ jobs:
     - name: Tests
       env:
         TOKEN: ${{ secrets.TOKEN_4UC_MANAGER }}
-        SECS: ${{ secrets.SECS_BEWTEEN_REQUESTS }}
       run: |
         pytest
