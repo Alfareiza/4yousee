@@ -24,21 +24,13 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install -r requirements.txt
-        pip install pytest pytest-cov python-decouple vcrpy
+        pip install pytest pytest-cov python-decouple vcrpy codecov
         pip install -e .
     - name: Run pytest and Generate coverage report
       env:
         TOKEN: ${{ secrets.TOKEN_4UC_MANAGER }}
       run: |
         cd tests
-        pytest -v --disable-warnings --cov=./ --cov-report=xml:coverage.xml
+        pytest --cov . --cov-report xml:/home/runner/coverage.xml
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./coverage.xml
-        flags: unittests
-        env_vars: OS,PYTHON
-        name: codecov-umbrella
-        fail_ci_if_error: false
-        verbose: true
+      uses: codecov/codecov-action@v3
