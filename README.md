@@ -3,8 +3,7 @@ Python 4YouSee Manager API Wrapper
 </h2>
 
 
-## <div align = 'center'> <img src="https://badge.fury.io/py/fouryousee.svg" alt="PyPI version"> <img src="https://github.com/Alfareiza/4yousee/workflows/Pytests/badge.svg" /> <img alt="GitHub" src="https://img.shields.io/github/license/Alfareiza/4yousee?label=License"> <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dm/fouryousee?label=Downloads"> <img src='https://img.shields.io/pypi/pyversions/fouryousee.svg?label=Python' alt='Compatible Versions' /> <img src="https://codecov.io/gh/Alfareiza/4yousee/branch/main/graph/badge.svg?token=LN9T2JYAFN"/>  <img src='https://readthedocs.org/projects/fouryousee/badge/?version=latest' alt='Documentation Status' /></div>
-
+## <div align = 'center'> <img src="https://badge.fury.io/py/fouryousee.svg" alt="PyPI version"> <img src="https://github.com/Alfareiza/4yousee/workflows/Pytests/badge.svg" /> <img alt="GitHub" src="https://img.shields.io/github/license/Alfareiza/4yousee?label=License">  <img src='https://img.shields.io/pypi/pyversions/fouryousee.svg?label=Python&logo=python&logoColor=white' alt='Compatible Versions' /> <img alt="Codecov" src="https://img.shields.io/codecov/c/github/Alfareiza/4yousee?color=f01f7a&label=Coverage&logo=codecov&logoColor=white&token=LN9T2JYAFN"> <img src='https://readthedocs.org/projects/fouryousee/badge/?version=latest' alt='Documentation Status' target='http://fouryousee.readthedocs.io' /> <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dm/fouryousee?label=Downloads" target='http://fouryousee.readthedocs.io' /> </div>
 
 
 This library is a Python wrapper around the [4YouSee](https://docs.4yousee.com/api/) REST API.
