@@ -8,13 +8,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.9]
-        include:
-          - os: ubuntu-latest
-            python-version: 3.8
-          - os: ubuntu-latest
-            python-version: 3.7
+        os: [ubuntu-latest]
+        python-version: [3.8]
 
     steps:
     - uses: actions/checkout@v2
@@ -28,8 +23,8 @@ jobs:
     - name: Install dependencies
       run: |
         pip install --upgrade pip
-        pip install pytest
-        pip install pytest-cov
+        pip install -r requirements.txt
+        pip install pytest pytest-cov python-decouple vcrpy
         pip install -e .
     - name: Run pytest and Generate coverage report
       env:
