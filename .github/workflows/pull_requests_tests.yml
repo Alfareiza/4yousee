@@ -30,7 +30,7 @@ jobs:
       env:
         TOKEN: ${{ secrets.TOKEN_4UC_MANAGER }}
       run: |
-        pytest --cov=.\
+        pytest --cov=tests
     - name: Upload coverage to Codecov
       run: |
         codecov
