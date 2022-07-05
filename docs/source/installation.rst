@@ -15,7 +15,7 @@ Before start, is mandatory get an API key from your 4yousee account. Follow the 
 .. code:: python
 
     from fouryousee.fouryousee import FouryouseeAPI
-    TOKEN = ''
+    TOKEN_APP_KEY = ''
     my = FouryouseeAPI(TOKEN_APP_KEY)
 
 Once it has been instantiated, you will be able to consult all the information
@@ -34,5 +34,5 @@ Sending those params, ex.:
 .. code:: python
 
     from fouryousee.fouryousee import FouryouseeAPI
-    TOKEN = ''
+    TOKEN_APP_KEY = ''
     my = FouryouseeAPI(TOKEN_APP_KEY, name='Client 1', account='https://4usee.com/pepe', account_type='self')
