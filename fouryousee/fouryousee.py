@@ -518,10 +518,10 @@ class FouryouseeAPI(object):
             share the same playlist, it will consider just one.
 
         >>> my.get_players()  # Updating the player attribute
-        >>> set_plists = set()
+        >>> active_playlists = set()
         >>> for player in my.players:
-        ...    set_plists.add(player['playlists']['0']['id'])
-        >>> set_plists
+        ...    active_playlists.add(player['playlists']['0']['id'])
+        >>> active_playlists
         {1, 67, 3, 4, 5, 8}
 
         """
@@ -710,23 +710,28 @@ class FouryouseeAPI(object):
 
         >>> active_playlists, active_medias = [1, 67, 3, 4, 5, 8], []
         >>> my.get_playlists()
-        >>> for plist in list(filter(lambda x: x['id'] in active_playlists, my.playlists)):
+        >>> def active_contents(plist: dict) -> list:
+        ...     temp_act_list = []
         ...     for item in plist['items']:
         ...         match item['type']:
         ...             case 'media':
-        ...                 active_medias.append(item['id'])
+        ...                 temp_act_list += [item['id']]
         ...             case 'carousel':
-        ...                 if item['sequence']:
-        ...                     medias = my.get_medias(categoryId=item['id'])
-        ...                     active_medias += list(map(lambda x: x['id'], medias))
+        ...                 if item['items']:
+        ...                     temp_act_list += list(map(lambda x: x['id'], item['items'))
+        ...                 else:
+        ...                     pass
         ...             case 'videoWall':
         ...                     for rows in item['grid']:
-        ...                         active_medias += list(map(lambda x: x['id'], rows))
+        ...                         temp_act_list += list(map(lambda x: x['id'], rows))
+        ...             case 'subPlaylist':
+        ...                 temp_act_list += active_contents(item)
+        ...     return temp_act_list
+        >>> for plist in list(filter(lambda x: x['id'] in active_playlists, my.playlists)):
+        ...     active_medias += active_contents(plist)
         >>> print(sorted(list(set(active_medias)))
         [1, 3, 4, 8, 19, 20, 28, 30, 32, 33, 38, 39, 40, 45, 48, 49,
         50, 53, 54, 55, 56, 57, 66, 69, 80, 99, 100, 101]
-
-        .. warning:: The previous piece of code doesn't consider contents within subPlaylists.
 
         """
         if kwargs:
@@ -1926,7 +1931,8 @@ class FouryouseeAPI(object):
             raise Exception("Missing id of the player.")
 
         try:
-            if self.get_players(id=spec_id):
+            if self.
+            (id=spec_id):
                 return self.delete("players/{}".format(spec_id))
         except Exception:
             raise Exception(f"Player with ID {spec_id} was not found")
