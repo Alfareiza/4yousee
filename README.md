@@ -35,6 +35,41 @@ Once you have it installed, get an API key from [How to get a Token to integrate
 
 Once you have set the user's token, all calls to the API will include that token, as if the user was logged in.
 
+### Advance Usage
+
+#### How to get the actives medias
+
+Active medias are those content who is associated to a player. So, let's suppose, we have an iterable with the playlists id, called `active_playlists`
+
+```pyhon
+>>> active_playlists, active_medias = [1, 67, 3, 4, 5, 8], []
+>>> my.get_playlists()
+>>> def active_contents(plist: dict) -> list:
+...     temp_act_list = []
+...     for item in plist['items']:
+...         match item['type']:
+...             case 'media':
+...                 temp_act_list += [item['id']]
+...             case 'carousel':
+...                 if item['items']:
+...                     temp_act_list += list(map(lambda x: x['id'], item['items'))
+...                 else:
+...                     pass
+...             case 'videoWall':
+...                     for rows in item['grid']:
+...                         temp_act_list += list(map(lambda x: x['id'], rows))
+...             case 'subPlaylist':
+...                 temp_act_list += active_contents(item)
+...     return temp_act_list
+>>> for plist in list(filter(lambda x: x['id'] in active_playlists, my.playlists)):
+...     active_medias += active_contents(plist)
+>>> print(sorted(list(set(active_medias)))
+[1, 3, 4, 8, 19, 20, 28, 30, 32, 33, 38, 39, 40, 45, 48, 49, 50, 53, 54, 55, 56, 57, 66, 69, 80, 99, 100, 101]
+```
+
+
+
+
 
 ## Author
 
