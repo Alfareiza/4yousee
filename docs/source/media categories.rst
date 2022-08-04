@@ -18,7 +18,11 @@ Editing medias categories
 -------------------------
 .. autofunction:: fouryousee.FouryouseeAPI.edit_category
 
+
+Editing multiple medias categories
+--------------------------
 .. autofunction:: fouryousee.FouryouseeAPI.edit_multiple_categories
+
 
 Deleting medias categories
 --------------------------
