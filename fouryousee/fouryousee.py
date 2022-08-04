@@ -1931,8 +1931,7 @@ class FouryouseeAPI(object):
             raise Exception("Missing id of the player.")
 
         try:
-            if self.
-            (id=spec_id):
+            if self.get_players(id=spec_id):
                 return self.delete("players/{}".format(spec_id))
         except Exception:
             raise Exception(f"Player with ID {spec_id} was not found")
