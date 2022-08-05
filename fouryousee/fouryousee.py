@@ -389,6 +389,15 @@ class FouryouseeAPI(object):
 
         >>> my.get_media_category(id=123_456)
         Exception: {"message":"Category with ID 123456 was not found"}
+        
+        **Advanced usage**
+
+        - Getting empty media categories.
+
+        >>> my.get_media_category()
+        >>> [ mc['id'] for mc in my.media_category if not len(mc['sequence'])]
+        [9, 10, 14, 17, 18, 19, 20,]
+
 
         """
         if kwargs:
