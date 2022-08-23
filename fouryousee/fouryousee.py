@@ -2553,34 +2553,39 @@ class FouryouseeAPI(object):
         - Removing empty carousels from a playlist
         
         >>> plist = my.get_playlists(id=75)
-        >>> for idx, item in enumerate(plist['items']):
-                # Conferindo se o item da playlist é carousel e se está vazío
-                if item['type'] == 'carousel' and not item['sequence']:
-                    empty_car = True
-                    del plist['items'][idx]
-                    plist['sequence'] = list(filter(lambda s: s != idx, plist['sequence']))
-                    print('Carousel \"{} - {}" excluido da playlist "{} - {}"'.\
-                                                              format(item['id'],
-                                                                     item['name'],
-                                                                     plist['id'],
-                                                                     plist['name'])
-                          )
-                    for i, seq in enumerate(plist['sequence']):
-                        if seq > idx:
-                            plist['plist'][i] = seq - 1
-        >>> if empty_car:
-                new_items = []
-                for item in plist['items']:
-                    if item['type'] in ['videoWall', 'news']:
-                        new_items.append(item)
+        >>> empty_car = False
+        >>> print(f"Analisando playlist \"{plist['id']} - {plist['name']}\"")
+        >>> idx = 0
+        >>> while idx <= len(plist['items']):
+                try:
+                    if plist['items'][idx]['type'] == 'carousel' and not plist['items'][idx]['sequence']:
+                        empty_car = True
+                        print("\tCarousel excluido : \"{} - {}\"".\
+                                                  format(plist['items'][idx]['id'],
+                                                         plist['items'][idx]['name']))
+                        del plist['items'][idx]
+                        plist['sequence'] = list(filter(lambda s: s != idx, plist['sequence']))
+                        plist['sequence'] = list(map(lambda seq: seq - 1 if seq > idx else seq, plist['sequence']))
                     else:
-                        new_items.append({'type': item['type'], 'id': item['id']})
-                # Alterando playlist        
-                my.edit_playlist(id=plist['id'],
-                                 items=new_items,
-                                 sequence=plist['sequence'])
+                        idx += 1
+                except IndexError:
+                    break
+         >>> if empty_car:
+                try:
+                    new_items = []
+                    for item in plist['items']:
+                        if item['type'] in ['videoWall', 'news']:
+                            new_items.append(item)
+                        else:
+                            new_items.append({'type': item['type'], 'id': item['id']})
+                    my.edit_playlist(id=plist['id'],
+                                     items=new_items,
+                                     sequence=plist['sequence'])
+                    print(f"\tPlaylist \"{plist['id']} - {plist['name']}\" atualizada!")
+                except Exception as e:
+                    print(f"\tNão foi possível atualizar playlist \"{plist['id']} - {plist['name']}\"\n\tError : {e}")
             else:
-                print(f"Playlist \'{plist['id']} - {plist['name']}\' não tem carroseis vazíos")
+                print(f"\tPlaylist \"{plist['id']} - {plist['name']}\" não tem carroseis vazíos")
 
 
         .. warning:: The previous piece of code doesn't consider a playlist with videowalls.
