@@ -2549,6 +2549,39 @@ class FouryouseeAPI(object):
           ],
           "sequence": [ 0, 1, 2 ]
         }
+        
+        - Removing empty carousels from a playlist
+        
+        >>> plist = my.get_playlists(id=75)
+        >>> for idx, item in enumerate(plist['items']):
+                # Conferindo se o item da playlist é carousel e se está vazío
+                if item['type'] == 'carousel' and not item['sequence']:
+                    empty_car = True
+                    del plist['items'][idx]
+                    plist['sequence'].remove(idx)
+                    print('Carousel \"{} - {}" excluido da playlist "{} - {}"'.\
+                                                              format(item['id'],
+                                                                     item['name'],
+                                                                     plist['id'],
+                                                                     plist['name'])
+                          )
+                    for i, seq in enumerate(plist['sequence']):
+                        if seq > idx:
+                            plist['plist'][i] = seq - 1
+        >>> if empty_car:
+                new_items = []
+                for item in plist['items']:
+                    if item['type'] in ['videoWall', 'news']:
+                        new_items.append(item)
+                    else:
+                        new_items.append({'type': item['type'], 'id': item['id']})
+                # Alterando playlist        
+                my.edit_playlist(id=plist['id'],
+                                 items=new_items,
+                                 sequence=plist['sequence'])
+            else:
+                print(f"Playlist \'{plist['id']} - {plist['name']}\' não tem carroseis vazíos")
+
 
         .. warning:: The previous piece of code doesn't consider a playlist with videowalls.
 
