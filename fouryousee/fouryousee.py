@@ -2558,7 +2558,7 @@ class FouryouseeAPI(object):
                 if item['type'] == 'carousel' and not item['sequence']:
                     empty_car = True
                     del plist['items'][idx]
-                    plist['sequence'].remove(idx)
+                    plist['sequence'] = list(filter(lambda s: s != 2, plist['sequence']))
                     print('Carousel \"{} - {}" excluido da playlist "{} - {}"'.\
                                                               format(item['id'],
                                                                      item['name'],
